@@ -33,7 +33,7 @@ const App: React.FC = () => {
   const fetchImages = async () => {
     try {
       setLoading(true);
-      const response = ResponseType = await axios.get(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
+      const response = await axios.get(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
         headers: {
           Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY',
         },
