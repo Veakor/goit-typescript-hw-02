@@ -44,7 +44,7 @@ const App: React.FC = () => {
     
     catch (error) {
       console.error('Error fetching images:', error);
-      setError('Error: Failed to load images.');
+     
       setLoading(false);
     }
   };
