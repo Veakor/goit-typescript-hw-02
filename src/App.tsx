@@ -33,14 +33,16 @@ const App: React.FC = () => {
   const fetchImages = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
+      const response = any = await axios.get(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
         headers: {
           Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY',
         },
       });
       setImages(prevImages => [...prevImages, ...response.data.results]);
       setLoading(false);
-    } catch (error) {
+    } 
+    
+    catch (error) {
       console.error('Error fetching images:', error);
       setError('Error: Failed to load images.');
       setLoading(false);
@@ -72,7 +74,7 @@ const App: React.FC = () => {
   const handleLoadMore = () => {
     setPage(prevPage => prevPage + 1);
   };
-  
+
   return (
     <div>
       <SearchBar onSubmit={handleSubmit} />
