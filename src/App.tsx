@@ -7,26 +7,37 @@ import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageModal from './components/ImageModal/ImageModal'
 
-const App = () => {
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
+type Image = {
+  id: string;
+  urls: {
+    regular: string;
+  };
+  alt_description: string;
+};
 
+type SelectedImage = {
+  imageUrl: string;
+  alt: string;
+};
+
+// Компонент App
+const App: React.FC = () => {
+  const [images, setImages] = useState<Image[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
 
   const fetchImages = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
         headers: {
-          Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY', 
+          Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY',
         },
       });
-      
-
       setImages(prevImages => [...prevImages, ...response.data.results]);
       setLoading(false);
     } catch (error) {
@@ -35,20 +46,20 @@ const App = () => {
       setLoading(false);
     }
   };
-   
+
   useEffect(() => {
     if (searchTerm !== '') {
       fetchImages();
     }
   }, [searchTerm, page]);
 
-  const handleSubmit = (term) => {
+  const handleSubmit = (term: string) => {
     setSearchTerm(term);
     setPage(1);
     setImages([]);
-  }
+  };
 
-  const handleImageClick = (imageUrl, alt) => {
+  const handleImageClick = (imageUrl: string, alt: string) => {
     setSelectedImage({ imageUrl, alt });
     setIsModalOpen(true);
   };
@@ -59,11 +70,9 @@ const App = () => {
   };
 
   const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1); 
+    setPage(prevPage => prevPage + 1);
   };
-
   
-
   return (
     <div>
       <SearchBar onSubmit={handleSubmit} />
