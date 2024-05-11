@@ -59,7 +59,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (searchTerm !== '') {
-      fetchImages();
+      fetchImages(searchTerm, page);
     }
   }, [searchTerm, page]);
 
