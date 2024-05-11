@@ -7,7 +7,7 @@ import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageModal from './components/ImageModal/ImageModal'
 
-type Image = {
+type CostomImage = {
   id: string;
   urls: {
     regular: string;
@@ -46,7 +46,7 @@ const App: React.FC = () => {
           Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY',
         },
       });
-      setImages(prevImages => [...prevImages, ...response.data.results]);
+      setImages(prevImages => [...prevImages, ...response.data.data.results]);
       setLoading(false);
     } 
     
