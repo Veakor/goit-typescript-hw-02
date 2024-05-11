@@ -7,31 +7,25 @@ import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageModal from './components/ImageModal/ImageModal'
 
-type UnsplashImage = {
+type Image = {
   id: string;
   urls: {
     regular: string;
   };
   alt_description: string;
-  alt: string;
 };
 
 type SelectedImage = {
   imageUrl: string;
   alt: string;
 };
-
-type SearchResponse = {
-  data: {
-    results: UnsplashImage [];
-  };
-  status: number;
-  statusText: string;
+type ResponseData = {
+  results: Image[];
 };
 
 // Компонент App
 const App: React.FC = () => {
-  const [images, setImages] = useState<UnsplashImage []>([]);
+  const [images, setImages] = useState<Image []>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(null);
@@ -42,25 +36,25 @@ const App: React.FC = () => {
   async function fetchImages(searchTerm: string, page: number)  {
     try {
       setLoading(true);
-      const response = await axios.get<SearchResponse>(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
+      const response = await axios.get<ResponseData>(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
         headers: {
           Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY',
         },
       });
-      setImages(prevImages => [...prevImages, ...response.data.data.results]);
+      setImages(prevImages => [...prevImages, ...response.data.results]);
       setLoading(false);
     } 
     
     catch (error) {
       console.error('Error fetching images:', error);
-     
+      setError('Error: Failed to load images.');
       setLoading(false);
     }
   };
 
   useEffect(() => {
     if (searchTerm !== '') {
-      fetchImages(searchTerm, page);
+      fetchImages();
     }
   }, [searchTerm, page]);
 
