@@ -7,12 +7,13 @@ import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageModal from './components/ImageModal/ImageModal'
 
-type Image= {
+type UnsplashImage = {
   id: string;
   urls: {
     regular: string;
   };
   alt_description: string;
+  alt: string;
 };
 
 type SelectedImage = {
@@ -22,7 +23,7 @@ type SelectedImage = {
 
 type SearchResponse = {
   data: {
-    results: Image[];
+    results: UnsplashImage [];
   };
   status: number;
   statusText: string;
@@ -30,7 +31,7 @@ type SearchResponse = {
 
 // Компонент App
 const App: React.FC = () => {
-  const [images, setImages] = useState<Image[]>([]);
+  const [images, setImages] = useState<UnsplashImage []>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(null);
