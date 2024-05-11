@@ -7,7 +7,7 @@ import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 import ImageModal from './components/ImageModal/ImageModal'
 
-type CostomImage = {
+type Image = {
   id: string;
   urls: {
     regular: string;
