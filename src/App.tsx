@@ -20,6 +20,14 @@ type SelectedImage = {
   alt: string;
 };
 
+type SearchResponse = {
+  data: {
+    results: Image[];
+  };
+  status: number;
+  statusText: string;
+};
+
 // Компонент App
 const App: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
@@ -30,15 +38,15 @@ const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [page, setPage] = useState<number>(1);
 
-  const fetchImages = async () => {
+  async function fetchImages(searchTerm: string, page: number)  {
     try {
       setLoading(true);
-      const response = await axios.get(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
+      const response = await axios.get<SearchResponse>(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
         headers: {
           Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY',
         },
       });
-      setImages(prevImages => [...prevImages, ...response.data.results]);
+      const images = response.data.results;
       setLoading(false);
     } 
     
