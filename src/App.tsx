@@ -21,7 +21,7 @@ type SelectedImage = {
   alt: string;
 };
 type ResponseData = {
-  results: [];
+  results: Image[];
 };
 
 
