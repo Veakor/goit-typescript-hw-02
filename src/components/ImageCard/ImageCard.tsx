@@ -1,10 +1,5 @@
-type Image = {
-  urls: {
-    small: string;
-    regular: string;
-  };
-  alt: string;
-};
+import {Image}from "../types"
+
 
 type ImageCardProps = {
   image: Image;
@@ -15,8 +10,8 @@ const ImageCard: React.FC<ImageCardProps> = ({ image, onImageClick }) => {
   return (
     <img
       src={image.urls.small}
-      alt={image.alt}
-      onClick={() => onImageClick(image.urls.regular, image.alt)}
+      alt={image.alt_description}
+      onClick={() => onImageClick(image.urls.regular, image.alt_description)}
     />
   );
 };
