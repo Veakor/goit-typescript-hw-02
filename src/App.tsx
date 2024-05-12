@@ -13,6 +13,7 @@ type UnsplashImage = {
     regular: string;
   };
   alt_description: string;
+ 
 };
 
 type SelectedImage = {
@@ -22,6 +23,7 @@ type SelectedImage = {
 type ResponseData = {
   results: [];
 };
+
 
 // Компонент App
 const App: React.FC = () => {
