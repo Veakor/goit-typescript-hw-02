@@ -20,7 +20,7 @@ type SelectedImage = {
   alt: string;
 };
 type ResponseData = {
-  results: Image[];
+  results: [];
 };
 
 // Компонент App
