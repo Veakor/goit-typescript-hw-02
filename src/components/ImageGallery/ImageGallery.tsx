@@ -1,14 +1,6 @@
 import style from './ImageGallery.module.css';
 import ImageCard from '../ImageCard/ImageCard';
-
-
-type Image = {
-  urls: {
-    small: string;
-    regular: string;
-  };
-  alt: string;
-};
+import {Image} from "../types";
 
 type ImageGalleryProps = {
   images: Image[];
