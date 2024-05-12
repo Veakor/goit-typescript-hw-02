@@ -1,102 +1,89 @@
-import  { useState, useEffect } from 'react';
-import axios from 'axios';
-import SearchBar from './components/SearchBar/SearchBar';
-import ImageGallery from './components/ImageGallery/ImageGallery';
-import LoaderComponent from './components/Loader/LoaderComponent';
-import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
-import ErrorMessage from './components/ErrorMessage/ErrorMessage';
-import ImageModal from './components/ImageModal/ImageModal';
+import { useEffect, useState } from "react";
+import "./App.css";
 
-type Image = {
-  id: string;
-  urls: {
-    regular: string;
-  };
-  alt_description: string;
-};
+import { getImages } from "./services/API";
+import SearchBar from "./components/SearchBar/SearchBar";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+import Loader from "./components/Loader/LoaderComponent";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
+import ImageModal from "./components/ImageModal/ImageModal";
+import MoreLoader from "./components/MoreLoader/MoreLoader";
 
+import { CardImageType, ImageType } from "./components/types";
 
-type SelectedImage = {
-  imageUrl: string;
-  alt: string;
-};
-type ResponseData = {
-  results: Image[];
-};
-
-
-// Компонент App
-const App: React.FC = () => {
-  const [images, setImages] = useState<Image []>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [page, setPage] = useState<number>(1);
-
-  async function fetchImages(searchTerm: string, page: number)  {
-    try {
-      setLoading(true);
-      const response = await axios.get<ResponseData>(`https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}`, {
-        headers: {
-          Authorization: 'Client-ID qGnIJ82TK4aWAvZ_LXe10mkMvKrzLj-ANSCPrgtH1cY',
-        },
-      });
-      setImages(prevImages => [...prevImages, ...response.data.results]);
-      setLoading(false);
-    } 
-    
-    catch (error) {
-      console.error('Error fetching images:', error);
-      setError('Error: Failed to load images.');
-      setLoading(false);
-    }
-  };
+function App() {
+  const [cardArr, setCardArr] = useState<ImageType[]>([]);
+  const [loader, setLoader] = useState<boolean>(false);
+  const [moreLoader, setMoreLoader] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [valueInput, setValueInput] = useState<string>("");
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [showLoreMore, setShowLoreMore] = useState<boolean>(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [modalValueImg, setModalValueImg] = useState<CardImageType>(Object);
 
   useEffect(() => {
-    if (searchTerm !== '') {
-      fetchImages(searchTerm, page);
+    if (!valueInput) return;
+
+    async function dataImages(): Promise<void> {
+      setError(false);
+      try {
+        const data: ImageType[] = await getImages(valueInput, pageNumber);
+        setCardArr([...cardArr, ...data]);
+        setShowLoreMore(true);
+      } catch (error) {
+        setShowLoreMore(false);
+        setError(true);
+      } finally {
+        setLoader(false);
+        setMoreLoader(false);
+      }
     }
-  }, [searchTerm, page]);
+    dataImages();
+  }, [valueInput, pageNumber]);
 
-  const handleSubmit = (term: string) => {
-    setSearchTerm(term);
-    setPage(1);
-    setImages([]);
+  const onSubmit = (event: string): void => {
+    setLoader(true);
+    setCardArr([]);
+    setPageNumber(1);
+    setValueInput(event);
   };
 
-  const handleImageClick = (imageUrl: string, alt: string) => {
-    setSelectedImage({ imageUrl, alt });
-    setIsModalOpen(true);
+  const onClick = (): void => {
+    setMoreLoader(true);
+    setPageNumber(pageNumber + 1);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImage(null);
+  const openModal = (event: CardImageType): void => {
+    setModalIsOpen(event.bool);
+    setModalValueImg(event);
   };
 
-  const handleLoadMore = () => {
-    setPage(prevPage => prevPage + 1);
+  const closeModal = (): void => {
+    setModalIsOpen(false);
   };
 
   return (
-    <div>
-      <SearchBar onSubmit={handleSubmit} />
-      {loading && <LoaderComponent />}
-      {error && <ErrorMessage message={error} />}
-      {images.length > 0 && <ImageGallery images={images} onImageClick={handleImageClick} />}
-      {!loading && images.length > 0 && <LoadMoreBtn onClick={handleLoadMore} />}
-      {isModalOpen && selectedImage && (
-        <ImageModal 
-          isOpen={isModalOpen} 
-          onRequestClose={closeModal} 
-          imageUrl={selectedImage.imageUrl} 
-          alt={selectedImage.alt} 
+    <>
+      <SearchBar onSubmit={onSubmit} />
+      {loader && <Loader />}
+      {error ? (
+        <ErrorMessage />
+      ) : (
+        <ImageGallery cardImages={cardArr} openModal={openModal} />
+      )}
+      {moreLoader && <MoreLoader />}
+      {showLoreMore && <LoadMoreBtn onClick={onClick} />}
+      {modalIsOpen && (
+        <ImageModal
+          modalIsOpen={modalIsOpen}
+          closeModal={closeModal}
+          cardImages={modalValueImg}
         />
       )}
-    </div>
+    </>
   );
-};
+}
 
 export default App;

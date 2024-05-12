@@ -1,23 +1,25 @@
-import style from './ImageGallery.module.css';
-import ImageCard from '../ImageCard/ImageCard';
-import {Image} from "../types";
+import { FC } from "react";
+import { ImageType, CardImageType } from "../types";
 
-type ImageGalleryProps = {
-  images: Image[];
-  onImageClick: (url: string, alt: string) => void;
-};
+import ImageCard from "../ImageCard/ImageCard";
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ images, onImageClick }) => {
+import clsx from "clsx";
+import style from "./ImageGallery.module.css";
+
+interface ImageProps {
+  cardImages: ImageType[];
+  openModal: (object: CardImageType) => void;
+}
+
+const ImageGallery: FC<ImageProps> = ({ cardImages, openModal }) => {
   return (
-    <ul className={style.imageGallery}>
-      {images.map((image, index) => (
-        <li key={index}>
-          <ImageCard 
-            image={image} 
-            onImageClick={onImageClick}
-          />
-        </li>
-      ))}
+    <ul className={clsx(style.galleryList)}>
+      {Array.isArray(cardImages) &&
+        cardImages.map((item) => {
+          return (
+            <ImageCard key={item.id} dataImages={item} openModal={openModal} />
+          );
+        })}
     </ul>
   );
 };

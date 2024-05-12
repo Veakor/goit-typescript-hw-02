@@ -1,0 +1,25 @@
+.errorBox {
+    margin: 150px auto;
+    padding: 25px;
+    max-width: 400px;
+    border: 1px red solid;
+    border-radius: 20px;
+    background-color: azure;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .errorTitrle {
+    margin: 0;
+    font-weight: 700;
+    font-size: 24px;
+    color: black;
+  }
+  .errorText {
+    margin: 0;
+    font-weight: 500;
+    font-size: 18px;
+    color: black;
+  }

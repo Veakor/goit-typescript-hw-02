@@ -1,27 +1,42 @@
-import Modal from 'react-modal';
-import style from './ImageModal.module.css';
+import { FC } from "react";
+import Modal from "react-modal";
+import { CardImageType } from "../types";
+Modal.setAppElement("#root");
 
-type ImageModalProps = {
-    isOpen: boolean;
-    onRequestClose: () => void;
-    imageUrl: string;
-    alt: string;
-  };
-  
-  const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onRequestClose, imageUrl, alt }) => {
-    console.log('imageUrl:', imageUrl);
-    console.log('alt:', alt);
-  
-    return (
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
+interface ImageProps {
+  cardImages: CardImageType;
+  closeModal: () => void;
+  modalIsOpen: boolean;
+}
+
+const ImageModal: FC<ImageProps> = ({
+  modalIsOpen,
+  closeModal,
+  cardImages,
+}) => {
+  return (
+    <div id="modalWindow">
       <Modal
-        isOpen={isOpen}
-        onRequestClose={onRequestClose}
-        contentLabel="Image Modal"
-        className={style.imageModal}
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
       >
-        <img src={imageUrl} alt={alt} />
+        <img src={cardImages.src} alt={cardImages.alt} />
       </Modal>
-    );
-  };
-  
-  export default ImageModal;
+    </div>
+  );
+};
+
+export default ImageModal;
