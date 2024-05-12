@@ -5,16 +5,16 @@ import ImageGallery from './components/ImageGallery/ImageGallery';
 import LoaderComponent from './components/Loader/LoaderComponent';
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
-import ImageModal from './components/ImageModal/ImageModal'
+import ImageModal from './components/ImageModal/ImageModal';
 
-type UnsplashImage = {
+type Image = {
   id: string;
   urls: {
     regular: string;
   };
   alt_description: string;
- 
 };
+
 
 type SelectedImage = {
   imageUrl: string;
@@ -27,7 +27,7 @@ type ResponseData = {
 
 // Компонент App
 const App: React.FC = () => {
-  const [images, setImages] = useState<UnsplashImage []>([]);
+  const [images, setImages] = useState<Image []>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(null);
