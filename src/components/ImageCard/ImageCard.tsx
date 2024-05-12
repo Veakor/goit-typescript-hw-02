@@ -2,17 +2,20 @@ import {Image}from "../types";
 
 
 type ImageCardProps = {
-  image: Image;
+  imageUrl: string;
+  alt: string;
   onImageClick: (url: string, alt: string) => void;
 };
 
-const ImageCard: React.FC<ImageCardProps> = ({ image, onImageClick }) => {
+const ImageCard: React.FC<ImageCardProps> = ({ imageUrl, alt, onImageClick }) => {
+  const handleClick = () => {
+    onImageClick(imageUrl, alt);
+  };
+
   return (
-    <img
-      src={image.urls.small}
-      alt={image.alt_description}
-      onClick={() => onImageClick(image.urls.regular, image.alt_description)}
-    />
+    <div className={style.imageCard} onClick={handleClick}>
+      <img src={imageUrl} alt={alt} />
+    </div>
   );
 };
 
